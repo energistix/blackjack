@@ -67,10 +67,6 @@ img {
   filter: blur(5px) grayscale(100%) brightness(50%);
 }
 
-#player {
-  border: 5px black solid;
-}
-
 .waiting {
   position: absolute;
   top: 50%;
