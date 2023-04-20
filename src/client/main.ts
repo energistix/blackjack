@@ -9,15 +9,20 @@ if (localStorage.getItem("pseudo") === null) {
   }
   localStorage.setItem("pseudo", pseudo)
 }
-const pseudo = localStorage.getItem("pseudo")
+const pseudo = localStorage.getItem("pseudo") as string
 
 socket.on("connect", () => {
   socket.emit("playerData", {
     pseudo
   })
   const myScreen = document.getElementById("player") as HTMLDivElement
-  const myCardScreen = new cardScreen()
+  const myCardScreen = new cardScreen(pseudo)
   myScreen.appendChild(myCardScreen.mainElement)
+
+  const houseScreen = document.getElementById("house") as HTMLDivElement
+  const houseCardScreen = new cardScreen()
+  houseScreen.appendChild(houseCardScreen.mainElement)
+  houseCardScreen.enable()
 })
 
 class Card {
@@ -52,8 +57,9 @@ class cardScreen {
   valueElement: HTMLParagraphElement
   cards: Card[] = []
   cardListElement: HTMLDivElement
+  waitingElement: HTMLDivElement | null
 
-  constructor(pseudo = "") {
+  constructor(public pseudo = "The house") {
     this.mainElement = document.createElement("div")
     this.mainElement.classList.add("card-screen")
 
@@ -68,6 +74,30 @@ class cardScreen {
     this.cardListElement = document.createElement("div")
     this.cardListElement.classList.add("card-list")
     this.mainElement.appendChild(this.cardListElement)
+
+    this.valueElement.classList.add("disabled")
+    this.cardListElement.classList.add("disabled")
+
+    this.waitingElement = document.createElement("div")
+    this.waitingElement.innerText = "Waiting..."
+    this.waitingElement.classList.add("waiting")
+    this.mainElement.appendChild(this.waitingElement)
+
+    for (let i = 0; i < 6; i++) {
+      const img = document.createElement("img")
+      img.src = "/cards/back.png"
+      this.cardListElement.appendChild(img)
+    }
+  }
+
+  enable() {
+    this.valueElement.classList.remove("disabled")
+    this.cardListElement.classList.remove("disabled")
+
+    this.waitingElement?.remove()
+    for (const child of Array.from(this.cardListElement.children)) {
+      child.remove()
+    }
   }
 
   get value() {
@@ -100,6 +130,6 @@ class cardScreen {
   }
 
   drawValue() {
-    this.valueElement.textContent = `Vos cartes valent : ${this.value}`
+    this.valueElement.textContent = `${this.pseudo}'s cards value : ${this.value}`
   }
 }
