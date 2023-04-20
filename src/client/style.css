@@ -4,6 +4,22 @@
   height: 100vh;
 }
 
+.card-screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+p {
+  position: relative;
+  font-size: large;
+  color: #336600;
+}
+
 body {
   margin: 0;
 }
@@ -36,4 +52,11 @@ img {
   flex-wrap: wrap;
   height: 100vh;
   width: 30vw;
+}
+
+.card-list {
+  width: 100%;
+  height: 40%;
+  display: block;
+  overflow: hidden;
 }
