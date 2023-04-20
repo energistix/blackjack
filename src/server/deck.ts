@@ -9,17 +9,30 @@ const cardKinds = [
 
 const suits = ["heart", "diamond", "spade", "club"]
 const defaultCards = suits
-  .map((suit) => cardKinds.map((cardKind) => `${cardKind}_${suit}`))
+  .map((suit) => cardKinds.map((cardKind) => [cardKind, suit]))
   .flat()
 
 export default class Deck {
-  cardTitles: string[] = defaultCards.concat()
-  constructor() {}
+  cardTitles: string[][] = []
+  constructor(private allCards = false) {
+    if (allCards) this.cardTitles = defaultCards.concat()
+  }
+
+  shuffle() {
+    this.cardTitles = this.cardTitles.sort(() => Math.random() - 0.5)
+  }
+
+  draw() {
+    return this.cardTitles.shift()
+  }
+
+  reset() {
+    if (this.allCards === true) this.cardTitles = defaultCards.concat()
+    else this.cardTitles = []
+  }
 }
 
 export function cardValue(title: string) {
-  //TODO: 1 card can be valued 11 if it advantages the player
-  //not sure if this should be managed here yet
   const v = title.split("_")[0]
   if (Number.isNaN(v)) return 10
   else return Number(v)
