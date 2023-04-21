@@ -10,10 +10,10 @@ const cardKinds = [
 const suits = ["heart", "diamond", "spade", "club"]
 const defaultCards = suits
   .map((suit) => cardKinds.map((cardKind) => [cardKind, suit]))
-  .flat()
+  .flat() as [string, string][]
 
 export default class Deck {
-  cardTitles: string[][] = []
+  cardTitles: [string, string][] = []
   constructor(private allCards = false) {
     if (allCards) this.cardTitles = defaultCards.concat()
   }
@@ -23,7 +23,7 @@ export default class Deck {
   }
 
   draw() {
-    return this.cardTitles.shift()
+    return this.cardTitles.shift() as [string, string]
   }
 
   reset() {
